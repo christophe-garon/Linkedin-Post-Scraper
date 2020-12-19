@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[6]:
+# In[29]:
 
 
 #required installs (i.e. pip3 install in terminal): pandas, selenium, bs4
@@ -12,15 +12,26 @@ import time
 import pandas as pd
 import re as re
 
-#access Webriver
-browser = webdriver.Chrome('chromedriver')
+
+
+try:
+    f= open("credentials.txt","r")
+    contents = f.read()
+    username = contents.replace("=",",").split(",")[1]
+    password = contents.replace("=",",").split(",")[3]
+except:
+    f= open("credentials.txt","w+")
+    username = input('Enter your linkedin username: ')
+    password = input('Enter your linkedin password: ')
+    f.write("username={}, password={}".format(username,password))
+    f.close()
 
 
 # In[7]:
 
 
-username = "username"
-password = "password"
+#access Webriver
+browser = webdriver.Chrome('chromedriver')
 
 #Open login page
 browser.get('https://www.linkedin.com/login?fromSignIn=true&trk=guest_homepage-basic_nav-header-signin')
@@ -39,7 +50,8 @@ elementID.submit()
 
 
 #Go to webpage
-browser.get('https://www.linkedin.com/company/lor%C3%A9al/')
+page = 'https://www.linkedin.com/company/lor%C3%A9al/'
+browser.get(page + 'posts/')
 
 
 # In[9]:
@@ -77,7 +89,7 @@ containers = linkedin_soup.findAll("div",{"class":"occludable-update ember-view"
 #container = containers[0].find("div","display-flex feed-shared-actor display-flex feed-shared-actor--with-control-menu ember-view")
 
 
-# In[11]:
+# In[21]:
 
 
 post_dates = []
@@ -177,7 +189,7 @@ for container in containers:
         pass
 
 
-# In[12]:
+# In[22]:
 
 
 # cleaned_dates = []
@@ -191,7 +203,7 @@ for i in post_comments:
     comment_count += [s]
 
 
-# In[13]:
+# In[23]:
 
 
 #pd.set_option('max_colwidth', 1000)
@@ -211,32 +223,7 @@ df = pd.DataFrame(data)
 df
 
 
-# In[14]:
-
-
-# import gspread
-# from oauth2client.service_account import ServiceAccountCredentials
-# import pprint
-# import pygsheets as ws
-
-
-# In[410]:
-
-
-# scope = ['https://spreadsheets.google.com/feeds',
-#          'https://www.googleapis.com/auth/drive']
-# creds = ServiceAccountCredentials.from_json_keyfile_name('client_secret.json', scope)
-# client = gspread.authorize(creds)
-
-
-# In[411]:
-
-
-# ws = client.open("loreal")
-# ws.sheet1.update([df.columns.values.tolist()] + df.values.tolist())
-
-
-# In[15]:
+# In[28]:
 
 
 df.to_csv("linkedin_page_posts.csv", encoding='utf-8', index=False)
