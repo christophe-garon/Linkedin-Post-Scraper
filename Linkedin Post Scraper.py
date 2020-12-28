@@ -12,15 +12,16 @@ import time
 import pandas as pd
 import re as re
 
-
+page = input("Enter the Company Linkedin URL: ")
+company_name = page[33:-1]
 
 try:
-    f= open("credentials.txt","r")
+    f= open("{}_credentials.txt".format(company_name),"r")
     contents = f.read()
     username = contents.replace("=",",").split(",")[1]
     password = contents.replace("=",",").split(",")[3]
 except:
-    f= open("credentials.txt","w+")
+    f= open("{}_credentials.txt".format(company_name),"w+")
     username = input('Enter your linkedin username: ')
     password = input('Enter your linkedin password: ')
     f.write("username={}, password={}".format(username,password))
@@ -50,7 +51,6 @@ elementID.submit()
 
 
 #Go to webpage
-page = 'https://www.linkedin.com/company/lor%C3%A9al/'
 browser.get(page + 'posts/')
 
 
@@ -226,9 +226,9 @@ df
 # In[28]:
 
 
-df.to_csv("linkedin_page_posts.csv", encoding='utf-8', index=False)
+df.to_csv("{}_posts.csv".format(company_name), encoding='utf-8', index=False)
 
-writer = pd.ExcelWriter("linkedin_page_posts.xlsx", engine='xlsxwriter')
+writer = pd.ExcelWriter("{}_posts.xlsx".format(company_name), engine='xlsxwriter')
 df.to_excel(writer, index =False)
 writer.save()
 
