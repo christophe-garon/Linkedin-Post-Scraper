@@ -16,12 +16,12 @@ page = input("Enter the Company Linkedin URL: ")
 company_name = page[33:-1]
 
 try:
-    f= open("{}_credentials.txt".format(company_name),"r")
+    f= open("credentials.txt","r")
     contents = f.read()
     username = contents.replace("=",",").split(",")[1]
     password = contents.replace("=",",").split(",")[3]
 except:
-    f= open("{}_credentials.txt".format(company_name),"w+")
+    f= open("credentials.txt","w+")
     username = input('Enter your linkedin username: ')
     password = input('Enter your linkedin password: ')
     f.write("username={}, password={}".format(username,password))
