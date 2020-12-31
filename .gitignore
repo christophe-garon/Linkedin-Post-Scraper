@@ -1,7 +1,6 @@
-LinkedIn Post Scraper.ipynb
+*.ipynb
 linkedin_scraper_public.py
-rei_credentials.txt
-rei_page_posts.xlsx
-.ipynb_checkpoints
+*credentials.txt
+*.xlsx
 .ipynb_checkpoints
 .DS_Store
