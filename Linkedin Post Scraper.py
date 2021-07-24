@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[29]:
+# In[1]:
 
 
 #required installs (i.e. pip3 install in terminal): pandas, selenium, bs4
@@ -28,7 +28,7 @@ except:
     f.close()
 
 
-# In[7]:
+# In[5]:
 
 
 #access Webriver
@@ -47,14 +47,14 @@ elementID.send_keys(password)
 elementID.submit()
 
 
-# In[8]:
+# In[28]:
 
 
-#Go to webpage
+# #Go to webpage
 browser.get(page + 'posts/')
 
 
-# In[9]:
+# In[34]:
 
 
 SCROLL_PAUSE_TIME = 1.5
@@ -62,10 +62,14 @@ SCROLL_PAUSE_TIME = 1.5
 # Get scroll height
 last_height = browser.execute_script("return document.body.scrollHeight")
 
+
 while True:
     # Scroll down to bottom
     browser.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
+    #uncomment to limit the number of scrolls
+    #scroll_number += 1
+    
     # Wait to load page
     time.sleep(SCROLL_PAUSE_TIME)
 
@@ -79,7 +83,7 @@ while True:
 company_page = browser.page_source   
 
 
-# In[10]:
+# In[35]:
 
 
 linkedin_soup = bs(company_page.encode("utf-8"), "html")
@@ -89,7 +93,7 @@ containers = linkedin_soup.findAll("div",{"class":"occludable-update ember-view"
 #container = containers[0].find("div","display-flex feed-shared-actor display-flex feed-shared-actor--with-control-menu ember-view")
 
 
-# In[21]:
+# In[36]:
 
 
 post_dates = []
@@ -105,7 +109,7 @@ for container in containers:
 
     try:
         posted_date = container.find("span",{"class":"visually-hidden"})
-        text_box = container.find("div",{"class":"feed-shared-update-v2__description-wrapper ember-view"})
+        text_box = container.find("div",{"class":"feed-shared-update-v2__description-wrapper"})
         text = text_box.find("span",{"dir":"ltr"})
         new_likes = container.findAll("li", {"class":"social-details-social-counts__reactions social-details-social-counts__item"})
         new_comments = container.findAll("li", {"class": "social-details-social-counts__comments social-details-social-counts__item"})
@@ -189,7 +193,7 @@ for container in containers:
         pass
 
 
-# In[22]:
+# In[42]:
 
 
 # cleaned_dates = []
@@ -199,11 +203,11 @@ for container in containers:
     
 comment_count = []
 for i in post_comments:
-    s = str(i).replace('Comment','').replace('s','').replace(' ','')
+    s = str(i).replace('comment','').replace('s','').replace(' ','')
     comment_count += [s]
 
 
-# In[23]:
+# In[43]:
 
 
 #pd.set_option('max_colwidth', 1000)
@@ -223,17 +227,14 @@ df = pd.DataFrame(data)
 df
 
 
-# In[28]:
+# In[39]:
 
 
-df.to_csv("{}_posts.csv".format(company_name), encoding='utf-8', index=False)
+#df.to_csv("{}_posts.csv".format(company_name), encoding='utf-8', index=False)
 
 writer = pd.ExcelWriter("{}_posts.xlsx".format(company_name), engine='xlsxwriter')
 df.to_excel(writer, index =False)
 writer.save()
-
-
-# In[ ]:
 
 
 
